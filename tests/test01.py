@@ -65,7 +65,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		mean_class_accuracy_sum += eval_result["mean_perClass_accuracy"]
 		
 		# Write the results on the file.
-		with open(output_file, 'a') as out_file:
+		with open(output_file, "a") as out_file:
 			out_file.write("--- User " + user + "\n")
 			out_file.write("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}\n".format(**eval_result))
 			
@@ -74,7 +74,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		# used for initializing the transfer learning model in test02.
 		kernel = deepSense_classifier.get_variable_value("dense/kernel")
 		bias = deepSense_classifier.get_variable_value("dense/bias")
-		with open(os.path.join(current_model_dir, "kernel_bias.csv"), 'w') as csvfile:
+		with open(os.path.join(current_model_dir, "kernel_bias.csv"), "w") as csvfile:
 				csv_writer = csv.writer(csvfile)	
 				csv_writer.writerow(np.concatenate((np.reshape(kernel, -1), bias)))
 			
@@ -82,7 +82,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 	cross_validation_accuracy = accuracy_sum / 9
 	cross_validation_mean_per_class_accuracy = mean_class_accuracy_sum / 9
 	# And write it on the output file.
-	with open(output_file, 'a') as out_file:
+	with open(output_file, "a") as out_file:
 		out_file.write("\n\nFinal Cross Validation Accuracy: " + str(cross_validation_accuracy))
 		out_file.write("\nFinal Cross Validation Mean Per Class Accuracy: " + str(cross_validation_mean_per_class_accuracy))
 
@@ -95,65 +95,65 @@ def perform_test01():
 		
 	# We are using the parameters of the model made available by the authors of DeepSense.
 	default_params = {
-			'acc_conv1_num_filters': 64,
-			'acc_conv1_kernel_size': [1, 6*3],
-			'acc_conv1_stride': [1, 6],
-			'acc_conv1_padding': "VALID",
-			'acc_conv1_dropout_rate': 0.2,
+			"acc_conv1_num_filters": 64,
+			"acc_conv1_kernel_size": [1, 6*3],
+			"acc_conv1_stride": [1, 6],
+			"acc_conv1_padding": "VALID",
+			"acc_conv1_dropout_rate": 0.2,
 		
-			'acc_conv2_num_filters': 64,
-			'acc_conv2_kernel_size': [1, 3],
-			'acc_conv2_stride': [1, 1],
-			'acc_conv2_padding': "VALID",
-			'acc_conv2_dropout_rate': 0.2,
+			"acc_conv2_num_filters": 64,
+			"acc_conv2_kernel_size": [1, 3],
+			"acc_conv2_stride": [1, 1],
+			"acc_conv2_padding": "VALID",
+			"acc_conv2_dropout_rate": 0.2,
 		
-			'acc_conv3_num_filters': 64,
-			'acc_conv3_kernel_size': [1, 3],
-			'acc_conv3_stride': [1, 1],
-			'acc_conv3_padding': "VALID",
+			"acc_conv3_num_filters": 64,
+			"acc_conv3_kernel_size": [1, 3],
+			"acc_conv3_stride": [1, 1],
+			"acc_conv3_padding": "VALID",
 		
-			'gyro_conv1_num_filters': 64,
-			'gyro_conv1_kernel_size': [1, 6*3],
-			'gyro_conv1_stride': [1, 6],
-			'gyro_conv1_padding': "VALID",
-			'gyro_conv1_dropout_rate': 0.2,
+			"gyro_conv1_num_filters": 64,
+			"gyro_conv1_kernel_size": [1, 6*3],
+			"gyro_conv1_stride": [1, 6],
+			"gyro_conv1_padding": "VALID",
+			"gyro_conv1_dropout_rate": 0.2,
 		
-			'gyro_conv2_num_filters': 64,
-			'gyro_conv2_kernel_size': [1, 3],
-			'gyro_conv2_stride': [1, 1],
-			'gyro_conv2_padding': "VALID",
-			'gyro_conv2_dropout_rate': 0.2,
+			"gyro_conv2_num_filters": 64,
+			"gyro_conv2_kernel_size": [1, 3],
+			"gyro_conv2_stride": [1, 1],
+			"gyro_conv2_padding": "VALID",
+			"gyro_conv2_dropout_rate": 0.2,
 		
-			'gyro_conv3_num_filters': 64,
-			'gyro_conv3_kernel_size': [1, 3],
-			'gyro_conv3_stride': [1, 1],
-			'gyro_conv3_padding': "VALID",
+			"gyro_conv3_num_filters": 64,
+			"gyro_conv3_kernel_size": [1, 3],
+			"gyro_conv3_stride": [1, 1],
+			"gyro_conv3_padding": "VALID",
 		
-			'sensor_conv_in_dropout_rate': 0.2,
+			"sensor_conv_in_dropout_rate": 0.2,
 		
-			'sensor_conv1_num_filters': 64,
-			'sensor_conv1_kernel_size': [1, 2, 8],
-			'sensor_conv1_stride': [1, 1, 1],
-			'sensor_conv1_padding': "SAME",
-			'sensor_conv1_dropout_rate': 0.2,
+			"sensor_conv1_num_filters": 64,
+			"sensor_conv1_kernel_size": [1, 2, 8],
+			"sensor_conv1_stride": [1, 1, 1],
+			"sensor_conv1_padding": "SAME",
+			"sensor_conv1_dropout_rate": 0.2,
 		
-			'sensor_conv2_num_filters': 64,
-			'sensor_conv2_kernel_size': [1, 2, 6],
-			'sensor_conv2_stride': [1, 1, 1],
-			'sensor_conv2_padding': "SAME",
-			'sensor_conv2_dropout_rate': 0.2,
+			"sensor_conv2_num_filters": 64,
+			"sensor_conv2_kernel_size": [1, 2, 6],
+			"sensor_conv2_stride": [1, 1, 1],
+			"sensor_conv2_padding": "SAME",
+			"sensor_conv2_dropout_rate": 0.2,
 		
-			'sensor_conv3_num_filters': 64,
-			'sensor_conv3_kernel_size': [1, 2, 4],
-			'sensor_conv3_stride': [1, 1, 1],
-			'sensor_conv3_padding': "SAME",
+			"sensor_conv3_num_filters": 64,
+			"sensor_conv3_kernel_size": [1, 2, 4],
+			"sensor_conv3_stride": [1, 1, 1],
+			"sensor_conv3_padding": "SAME",
 		
-			'gru_cell1_dropout_output_keep_prob': 0.5,
-			'gru_cell2_dropout_output_keep_prob': 0.5}
+			"gru_cell1_dropout_output_keep_prob": 0.5,
+			"gru_cell2_dropout_output_keep_prob": 0.5}
 
 # ---------------------------------- Dataset 130'000 ----------------------------------
 # We start with the bigger dataset.
-	with open(test01_results_filename, 'a') as out_file:
+	with open(test01_results_filename, "a") as out_file:
 		out_file.write("\n\n\n-------------------------- TEST 01 - Date: " + str(datetime.now()) + " --------------------------\n")
 		out_file.write("------------- Dataset 130'000 -------------\n")
 	print("------------- Dataset 130'000 -------------")
@@ -161,7 +161,7 @@ def perform_test01():
 		
 # ---------------------------------- Dataset 13'000	----------------------------------
 # Same as before, but with the other dataset.
-	with open(test01_results_filename, 'a') as out_file:
+	with open(test01_results_filename, "a") as out_file:
 		out_file.write("\n\n\n------------- Dataset 13'000 -------------\n")
 	print("------------- Dataset 13'000 -------------")
 	cross_validation(DATASET_13_PATH, "user_", "dataset13", model_dir_path, default_params, test01_results_filename)

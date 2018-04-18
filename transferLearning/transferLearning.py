@@ -54,9 +54,9 @@ def tl_model_fn(features, labels, mode, params):
 	if mode == tf.estimator.ModeKeys.PREDICT:
 		# Create a dictionary of predictions to be passed as output.
 		predictions = {
-		'class_ids': predicted_classes[:, tf.newaxis],
-		'probabilities': tf.nn.softmax(logits),
-		'logits': logits
+		"class_ids": predicted_classes[:, tf.newaxis],
+		"probabilities": tf.nn.softmax(logits),
+		"logits": logits
 		}
 		# With the export_outputs we define the outputs available for the SavedModel.
 		return tf.estimator.EstimatorSpec(mode, predictions=predictions, 
@@ -70,10 +70,10 @@ def tl_model_fn(features, labels, mode, params):
 	if mode == tf.estimator.ModeKeys.EVAL:
 		labels = tf.argmax(labels, 1)
 		# Add some metrics that will be calculated during evaluation.
-		accuracy = tf.metrics.accuracy(labels=labels, predictions=predicted_classes, name='accuracy_op')
+		accuracy = tf.metrics.accuracy(labels=labels, predictions=predicted_classes, name="accuracy_op")
 		mean_perClass_accuracy = tf.metrics.mean_per_class_accuracy(labels, predicted_classes, OUT_DIM, name="mean_perClass_accuracy_op")
-		metrics = {'accuracy': accuracy, 'mean_perClass_accuracy': mean_perClass_accuracy}
-		tf.summary.scalar('Accuracy', accuracy[1]) # for TensorBoard.
+		metrics = {"accuracy": accuracy, "mean_perClass_accuracy": mean_perClass_accuracy}
+		tf.summary.scalar("Accuracy", accuracy[1]) # for TensorBoard.
 		tf.summary.scalar("Mean Per Class Accuracy", mean_perClass_accuracy[1]) # for TensorBoard.
 		return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=metrics)
 	
@@ -104,4 +104,4 @@ if __name__ == "__main__":
 	# Predict.
 	predictions = deepSense_transferLearning_classifier.predict(lambda:tl_predict_input_fn("/Users/davidebuffelli/Desktop/Data/tl_sepHARData_a/eval/eval_200.csv"))
 	pred = next(predictions)
-	print(pred['class_ids'])
+	print(pred["class_ids"])

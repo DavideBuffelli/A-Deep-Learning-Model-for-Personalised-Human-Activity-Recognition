@@ -116,7 +116,7 @@ def merge_mesaurements(acc_measurements, gyro_measurements, output_dir):
 	# Write output.
 	global file_index
 	gt_folder = os.path.join(output_dir, gt)
-	with open(os.path.join(gt_folder, str(file_index)+".csv"), 'w') as writeFile:
+	with open(os.path.join(gt_folder, str(file_index)+".csv"), "w") as writeFile:
 		writer = csv.writer(writeFile)
 		writer.writerow(output)
 		file_index += 1
@@ -138,9 +138,9 @@ for user in users_names:
 		if not os.path.exists(os.path.join(output_dir, activity)):
 			os.mkdir(os.path.join(output_dir, activity))
 
-	with open(acc_file, "r") as accFile, open(gyro_file, 'r') as gyroFile:
-		readAcc = csv.DictReader(accFile, delimiter=',')
-		readGyro = csv.DictReader(gyroFile, delimiter=',')
+	with open(acc_file, "r") as accFile, open(gyro_file, "r") as gyroFile:
+		readAcc = csv.DictReader(accFile, delimiter=",")
+		readGyro = csv.DictReader(gyroFile, delimiter=",")
 		
 		# Different devices use different starting points for their timestamps(we can use
 		# this to distinguish devices), but they are always in nanoseconds, so dividing by

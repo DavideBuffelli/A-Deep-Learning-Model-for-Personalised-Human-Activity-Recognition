@@ -27,61 +27,61 @@ test02_results_filename = os.path.join(RESULTS_DATA_DIR, "test02.txt")
 def create_dataset(dataset_path, user_folder_prefix, model_dirs):
 	# We are using the parameters of the model made available by the authors of DeepSense.
 	default_params = {
-			'acc_conv1_num_filters': 64,
-			'acc_conv1_kernel_size': [1, 6*3],
-			'acc_conv1_stride': [1, 6],
-			'acc_conv1_padding': "VALID",
-			'acc_conv1_dropout_rate': 0.2,
+			"acc_conv1_num_filters": 64,
+			"acc_conv1_kernel_size": [1, 6*3],
+			"acc_conv1_stride": [1, 6],
+			"acc_conv1_padding": "VALID",
+			"acc_conv1_dropout_rate": 0.2,
 		
-			'acc_conv2_num_filters': 64,
-			'acc_conv2_kernel_size': [1, 3],
-			'acc_conv2_stride': [1, 1],
-			'acc_conv2_padding': "VALID",
-			'acc_conv2_dropout_rate': 0.2,
+			"acc_conv2_num_filters": 64,
+			"acc_conv2_kernel_size": [1, 3],
+			"acc_conv2_stride": [1, 1],
+			"acc_conv2_padding": "VALID",
+			"acc_conv2_dropout_rate": 0.2,
 		
-			'acc_conv3_num_filters': 64,
-			'acc_conv3_kernel_size': [1, 3],
-			'acc_conv3_stride': [1, 1],
-			'acc_conv3_padding': "VALID",
+			"acc_conv3_num_filters": 64,
+			"acc_conv3_kernel_size": [1, 3],
+			"acc_conv3_stride": [1, 1],
+			"acc_conv3_padding": "VALID",
 		
-			'gyro_conv1_num_filters': 64,
-			'gyro_conv1_kernel_size': [1, 6*3],
-			'gyro_conv1_stride': [1, 6],
-			'gyro_conv1_padding': "VALID",
-			'gyro_conv1_dropout_rate': 0.2,
+			"gyro_conv1_num_filters": 64,
+			"gyro_conv1_kernel_size": [1, 6*3],
+			"gyro_conv1_stride": [1, 6],
+			"gyro_conv1_padding": "VALID",
+			"gyro_conv1_dropout_rate": 0.2,
 		
-			'gyro_conv2_num_filters': 64,
-			'gyro_conv2_kernel_size': [1, 3],
-			'gyro_conv2_stride': [1, 1],
-			'gyro_conv2_padding': "VALID",
-			'gyro_conv2_dropout_rate': 0.2,
+			"gyro_conv2_num_filters": 64,
+			"gyro_conv2_kernel_size": [1, 3],
+			"gyro_conv2_stride": [1, 1],
+			"gyro_conv2_padding": "VALID",
+			"gyro_conv2_dropout_rate": 0.2,
 		
-			'gyro_conv3_num_filters': 64,
-			'gyro_conv3_kernel_size': [1, 3],
-			'gyro_conv3_stride': [1, 1],
-			'gyro_conv3_padding': "VALID",
+			"gyro_conv3_num_filters": 64,
+			"gyro_conv3_kernel_size": [1, 3],
+			"gyro_conv3_stride": [1, 1],
+			"gyro_conv3_padding": "VALID",
 		
-			'sensor_conv_in_dropout_rate': 0.2,
+			"sensor_conv_in_dropout_rate": 0.2,
 		
-			'sensor_conv1_num_filters': 64,
-			'sensor_conv1_kernel_size': [1, 2, 8],
-			'sensor_conv1_stride': [1, 1, 1],
-			'sensor_conv1_padding': "SAME",
-			'sensor_conv1_dropout_rate': 0.2,
+			"sensor_conv1_num_filters": 64,
+			"sensor_conv1_kernel_size": [1, 2, 8],
+			"sensor_conv1_stride": [1, 1, 1],
+			"sensor_conv1_padding": "SAME",
+			"sensor_conv1_dropout_rate": 0.2,
 		
-			'sensor_conv2_num_filters': 64,
-			'sensor_conv2_kernel_size': [1, 2, 6],
-			'sensor_conv2_stride': [1, 1, 1],
-			'sensor_conv2_padding': "SAME",
-			'sensor_conv2_dropout_rate': 0.2,
+			"sensor_conv2_num_filters": 64,
+			"sensor_conv2_kernel_size": [1, 2, 6],
+			"sensor_conv2_stride": [1, 1, 1],
+			"sensor_conv2_padding": "SAME",
+			"sensor_conv2_dropout_rate": 0.2,
 		
-			'sensor_conv3_num_filters': 64,
-			'sensor_conv3_kernel_size': [1, 2, 4],
-			'sensor_conv3_stride': [1, 1, 1],
-			'sensor_conv3_padding': "SAME",
+			"sensor_conv3_num_filters": 64,
+			"sensor_conv3_kernel_size": [1, 2, 4],
+			"sensor_conv3_stride": [1, 1, 1],
+			"sensor_conv3_padding": "SAME",
 		
-			'gru_cell1_dropout_output_keep_prob': 0.5,
-			'gru_cell2_dropout_output_keep_prob': 0.5}
+			"gru_cell1_dropout_output_keep_prob": 0.5,
+			"gru_cell2_dropout_output_keep_prob": 0.5}
 		
 	users = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 	activities = {0: "bike", 1: "sit", 2: "stand", 3: "walk", 4: "stairsup", 5: "stairsdown"}
@@ -107,7 +107,7 @@ def create_dataset(dataset_path, user_folder_prefix, model_dirs):
 		for file in filelist:
 			current_file_path = os.path.join(eval_data_folder_path, file)
 			label = None
-			with open(current_file_path, 'r') as csvfile:
+			with open(current_file_path, "r") as csvfile:
 				csv_reader = csv.reader(csvfile)
 				line = next(csv_reader)
 				label = np.array(line[-6:])
@@ -115,14 +115,14 @@ def create_dataset(dataset_path, user_folder_prefix, model_dirs):
 			# Obtain the input for the transfer learning model.
 			predictions = deepSense_classifier.predict(lambda:predict_input_fn(current_file_path))
 			pred = next(predictions)
-			tl_input = pred['tl_input']
+			tl_input = pred["tl_input"]
 			
 			# Write a new file with tl_input and label. (The file will have the same name
 			# as the original so we know which one generated each element of this dataset).
 			# We first organize the examples putting them in a separate directory for each activity...
 			output_folder_path = os.path.join(output_data_folder_path, activities[np.argmax(label)])
 			output_filename = os.path.join(output_folder_path, file)
-			with open(output_filename, 'w') as csvfile:
+			with open(output_filename, "w") as csvfile:
 				csv_writer = csv.writer(csvfile)	
 				csv_writer.writerow(np.concatenate((tl_input, label)))
 				
@@ -170,7 +170,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		# Read the values for kernel and bias.
 		kernel = None
 		bias = None
-		with open(user_data_folder_path, 'r') as csvfile:
+		with open(user_data_folder_path, "r") as csvfile:
 				csv_reader = csv.reader(csvfile)
 				line = next(csv_reader)
 				kernel = line[:-6]
@@ -199,7 +199,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		mean_class_accuracy_sum += eval_result["mean_perClass_accuracy"]
 		
 		# Write user results on file.
-		with open(output_file, 'a') as out_file:
+		with open(output_file, "a") as out_file:
 			out_file.write("--- User " + user + "\n")
 			out_file.write("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}\n".format(**eval_result))
 			
@@ -207,28 +207,28 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 def perform_test02():
 	# We need to create the dataset for the transfer learning model.
 	model_dirs = {
-		'a': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-a",
-		'b': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-b",
-		'c': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-c",
-		'd': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-d",
-		'e': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-e",
-		'f': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-f",
-		'g': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-g",
-		'h': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-h",
-		'i': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-i"
+		"a": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-a",
+		"b": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-b",
+		"c": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-c",
+		"d": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-d",
+		"e": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-e",
+		"f": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-f",
+		"g": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-g",
+		"h": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-h",
+		"i": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-i"
 		}
 	create_dataset(DATASET_130_PATH, "sepHARData_", model_dirs)
 	
 	model_dirs = {
-		'a': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-a",
-		'b': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-b",
-		'c': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-c",
-		'd': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-d",
-		'e': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-e",
-		'f': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-f",
-		'g': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-g",
-		'h': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-h",
-		'i': "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-i"
+		"a": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-a",
+		"b": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-b",
+		"c": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-c",
+		"d": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-d",
+		"e": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-e",
+		"f": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-f",
+		"g": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-g",
+		"h": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-h",
+		"i": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-i"
 		}
 	create_dataset(DATASET_13_PATH, "user_", model_dirs)
 	
@@ -239,7 +239,7 @@ def perform_test02():
 		os.mkdir(model_dir_path)
 
 # ---------------------------------- Dataset 130'000	----------------------------------			
-	with open(test02_results_filename, 'a') as out_file:
+	with open(test02_results_filename, "a") as out_file:
 		out_file.write("\n\n\n-------------------------- TEST 02 - Date: " + str(datetime.now()) + " --------------------------\n")
 		out_file.write("------------- Dataset 130'000 -------------\n")
 	print("------------- Dataset 130'000 -------------")
@@ -291,7 +291,7 @@ def perform_test02():
 	
 # ---------------------------------- Dataset 13'000	----------------------------------	
 	# Now same as before but for the 13'000 dataset
-	with open(test02_results_filename, 'a') as out_file:
+	with open(test02_results_filename, "a") as out_file:
 		out_file.write("------------- Dataset 13'000 -------------\n")
 	print("------------- Dataset 13'000 -------------")
 	cross_validation(DATASET_13_PATH, "user_", "dataset13", model_dir_path, test02_results_filename)
