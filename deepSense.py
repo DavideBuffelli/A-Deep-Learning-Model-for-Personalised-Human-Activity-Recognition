@@ -2,13 +2,6 @@ import tensorflow as tf
 import os
 
 # ---------------------------- CONSTANTS ------------------------------------------------
-# Directory Paths
-TRAINING_DATA_FOLDER_PATH = "/Users/davidebuffelli/Desktop/Prova/Data/train"
-EVAL_DATA_FOLDER_PATH = "/Users/davidebuffelli/Desktop/Prova/Data/eval"
-MODEL_DIR_PATH = "/Users/davidebuffelli/Desktop/Prova/ModelDir"
-SAVED_MODEL_DIR_PATH = "/Users/davidebuffelli/Desktop/Prova/SavedModelDir"
-
-# Constants
 BATCH_SIZE = 10 # Size of the batches of examples used for training and evaluation.
 SAMPLE_LENGTH = 5.0 # Length in seconds of each sample that is contained in a .csv file.
 TAO = 0.25 # Interval length
@@ -45,7 +38,7 @@ def input_fn(batch_size, training, data_folder_path):
 	dataset = tf.data.TextLineDataset(filename_queue) # Dataset that reads each file as a line of text.
 	dataset = dataset.map(read_csv) # Trasform a line of text in a dictionary with features, length and labels.
 	if training:
-		dataset = dataset.shuffle(buffer_size=100)
+		dataset = dataset.shuffle(buffer_size=1500)
 	dataset = dataset.batch(BATCH_SIZE)
 	
 	return dataset
@@ -230,6 +223,12 @@ def deepSense_model_fn(features, labels, mode, params):
 
 # ----------------------------- USAGE EXAMPLE -------------------------------------------
 if __name__ == "__main__":
+	# Directory Paths
+	TRAINING_DATA_FOLDER_PATH = "/Users/davidebuffelli/Desktop/Prova/Data/train"
+	EVAL_DATA_FOLDER_PATH = "/Users/davidebuffelli/Desktop/Prova/Data/eval"
+	MODEL_DIR_PATH = "/home/davidebuffelli/Desktop/Prova/ModelDir"
+	SAVED_MODEL_DIR_PATH = "/Users/davidebuffelli/Desktop/Prova/SavedModelDir"
+	
 	# -------------- CREATE ESTIMATOR
 	# Wrap DeepSense estimator in a tf.estimator.Estimator, passing all parameters.
 	deepSense_classifier = tf.estimator.Estimator(

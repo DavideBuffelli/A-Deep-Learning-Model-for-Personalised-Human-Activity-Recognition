@@ -25,6 +25,7 @@ def tl_input_fn(data_folder_path):
 		
 	dataset = tf.data.TextLineDataset(filename_queue) # Dataset that reads each file as a line of text.
 	dataset = dataset.map(read_csv) # Trasform a line of text in a dictionary with features, length and labels.
+	dataset = dataset.shuffle(buffer_size=500) # Shuffle the data.
 	
 	return dataset.batch(1)
 

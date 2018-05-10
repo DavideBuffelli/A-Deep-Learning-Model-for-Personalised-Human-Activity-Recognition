@@ -27,7 +27,7 @@ test01_results_filename = os.path.join(RESULTS_DATA_DIR, "test01.txt")
 
 def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path, model_params, output_file):
 	users = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
-	batch_size = 10 # Size of the batch used for training and evaluation.
+	batch_size = 64 # Size of the batch used for training and evaluation.
 	
 	accuracy_sum = 0 # We will use this two variables to keep track of the sum of the accuracies.
 	mean_class_accuracy_sum = 0
@@ -51,13 +51,13 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		# Train the estimator with the training data(which is the data from all other users).
 		print("Start training")
 		training_data_folder_path = os.path.join(user_data_folder_path, "train")
-		deepSense_classifier.train(lambda:input_fn(batch_size, True, training_data_folder_path), steps=1)
+		deepSense_classifier.train(lambda:input_fn(batch_size, True, training_data_folder_path))
 		print("End training")
 		
 		# Evaluate accuracy on test set(which is the current users data).
 		print("Start eval")
 		eval_data_folder_path = os.path.join(user_data_folder_path, "eval")
-		eval_result = deepSense_classifier.evaluate(lambda:input_fn(batch_size, False, eval_data_folder_path), steps=1)
+		eval_result = deepSense_classifier.evaluate(lambda:input_fn(batch_size, False, eval_data_folder_path))
 		print("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}".format(**eval_result))
 		print("End eval")
 		
@@ -162,7 +162,7 @@ def perform_test01():
 # ---------------------------------- Dataset 13'000	----------------------------------
 # Same as before, but with the other dataset.
 	with open(test01_results_filename, "a") as out_file:
-		out_file.write("\n\n\n------------- Dataset 13'000 -------------\n")
+		out_file.write("\n\n------------- Dataset 13'000 -------------\n")
 	print("------------- Dataset 13'000 -------------")
 	cross_validation(DATASET_13_PATH, "user_", "dataset13", model_dir_path, default_params, test01_results_filename)
 	

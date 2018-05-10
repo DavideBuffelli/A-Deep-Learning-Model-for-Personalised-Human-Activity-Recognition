@@ -86,6 +86,7 @@ def create_dataset(dataset_path, user_folder_prefix, model_dirs):
 	users = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 	activities = {0: "bike", 1: "sit", 2: "stand", 3: "walk", 4: "stairsup", 5: "stairsdown"}
 	for user in users:
+		print("Creating data for user ", user)
 		# Get the path of the data for training and evaluation of the current user.
 		user_data_folder_path = os.path.join(dataset_path, user_folder_prefix + user)
 		eval_data_folder_path = os.path.join(user_data_folder_path, "eval")
@@ -147,7 +148,7 @@ def create_dataset(dataset_path, user_folder_prefix, model_dirs):
 				copy(os.path.join(activity_directory_path, file), eval_folder_path)
 		
 		# Finally we also copy the kernel_bis file.
-		copy(os.pth.join(model_dirs[user], "kernel_bias.csv"), output_data_folder_path)
+		copy(os.path.join(model_dirs[user], "kernel_bias.csv"), output_data_folder_path)
 			
 def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path, output_file):		
 	users = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]		
@@ -170,12 +171,12 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		# Read the values for kernel and bias.
 		kernel = None
 		bias = None
-		with open(user_data_folder_path, "r") as csvfile:
+		with open(os.path.join(user_data_folder_path, "kernel_bias.csv"), "r") as csvfile:
 				csv_reader = csv.reader(csvfile)
 				line = next(csv_reader)
-				kernel = line[:-6]
+				kernel = np.array([float(i) for i in line[:-6]])
 				kernel = np.reshape(kernel, (120, 6))
-				bias = line[-6:]
+				bias = np.array([float(i) for i in line[-6:]])
 		
 		# Create the transfer learning estimator.
 		deepSense_transferLearning_classifier = tf.estimator.Estimator(
@@ -186,12 +187,12 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 	
 		print("Start Training")
 		# Train the classifier on training set.
-		deepSense_transferLearning_classifier.train(lambda:tl_input_fn(train_data_folder_path), steps=10)
+		deepSense_transferLearning_classifier.train(lambda:tl_input_fn(train_data_folder_path))
 		print("End Training")
 		
 		print("Start Evaluation")
 		# Evaluate accuracy on test set.
-		eval_result = deepSense_transferLearning_classifier.evaluate(lambda:tl_input_fn(eval_data_folder_path), steps=10)
+		eval_result = deepSense_transferLearning_classifier.evaluate(lambda:tl_input_fn(eval_data_folder_path))
 		print("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}".format(**eval_result))
 		print("End Evaluation")
 		
@@ -202,6 +203,14 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		with open(output_file, "a") as out_file:
 			out_file.write("--- User " + user + "\n")
 			out_file.write("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}\n".format(**eval_result))
+			
+	# Now we can calculate the mean accuracy between all users...
+	cross_validation_accuracy = accuracy_sum / 9
+	cross_validation_mean_per_class_accuracy = mean_class_accuracy_sum / 9
+	# And write it on the output file.
+	with open(output_file, "a") as out_file:
+		out_file.write("\n\nFinal Cross Validation Accuracy: " + str(cross_validation_accuracy))
+		out_file.write("\nFinal Cross Validation Mean Per Class Accuracy: " + str(cross_validation_mean_per_class_accuracy))
 			
 			
 def perform_test02():
@@ -217,7 +226,9 @@ def perform_test02():
 		"h": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-h",
 		"i": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-i"
 		}
+	print("Creating Dataset 130 ..")
 	create_dataset(DATASET_130_PATH, "sepHARData_", model_dirs)
+	print("Dataset 130 Created.")
 	
 	model_dirs = {
 		"a": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-a",
@@ -230,7 +241,9 @@ def perform_test02():
 		"h": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-h",
 		"i": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-i"
 		}
+	print("Creating Dataset 13..")
 	create_dataset(DATASET_13_PATH, "user_", model_dirs)
+	print("Dataset 13 Created.")
 	
 	
 	# Create a directory where we will save all the model directories.
@@ -244,101 +257,10 @@ def perform_test02():
 		out_file.write("------------- Dataset 130'000 -------------\n")
 	print("------------- Dataset 130'000 -------------")
 	cross_validation(DATASET_130_PATH, "sepHARData_", "dataset130", model_dir_path, test02_results_filename)
-	"""
-	accuracy_sum = 0 # We will use this two variables to keep track of the sum of the accuracies.
-	mean_class_accuracy_sum = 0
-	for user in users:
-		print("--- User ", user)
-		# We need a new model directory for each execution, otherwise we would be re-using
-		# an already trained model.
-		current_model_dir = os.path.join(model_dir_path, "tl-dataset130-user-" + user + " " + str(datetime.now()))
-		os.mkdir(current_model_dir)
-		
-		# Create the transfer learning estimator.
-		deepSense_transferLearning_classifier = tf.estimator.Estimator(
-			model_fn = tl_model_fn,
-			model_dir = current_model_dir,
-			params = {"kernel_value": 0, 
-						"bias_value": 0})
-		
-		# Get the path of the data for training and evaluation of the current user.
-		user_data130_folder_path = os.path.join(DATASET_130_PATH, "tl_sepHARData_" + user)
-		train_data_folder_path = os.path.join(user_data130_folder_path, "train")
-		eval_data_folder_path = os.path.join(user_data130_folder_path, "eval")
-	
-		print("Start Training")
-		# Train the classifier on training set.
-		deepSense_transferLearning_classifier.train(lambda:tl_input_fn(train_data_folder_path), steps=10)
-		print("End Training")
-		
-		print("Start Evaluation")
-		# Evaluate accuracy on test set.
-		eval_result = deepSense_transferLearning_classifier.evaluate(lambda:tl_input_fn(eval_data_folder_path), steps=10)
-		print("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}".format(**eval_result))
-		print("End Evaluation")
-		
-		accuracy_sum += eval_result["accuracy"]
-		mean_class_accuracy_sum += eval_result["mean_perClass_accuracy"]
-		
-		# Write user results on file.
-		with open(test02_results_filename, 'a') as out_file:
-			out_file.write("--- User " + user + "\n")
-			out_file.write("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}\n".format(**eval_result))
-	
-	# Compute cross validation results and write on file.	
-	cross_validation_accuracy = accuracy_sum / 9
-	cross_validation_mean_per_class_accuracy = mean_class_accuracy_sum / 9"""
 	
 # ---------------------------------- Dataset 13'000	----------------------------------	
 	# Now same as before but for the 13'000 dataset
 	with open(test02_results_filename, "a") as out_file:
-		out_file.write("------------- Dataset 13'000 -------------\n")
+		out_file.write("\n\n------------- Dataset 13'000 -------------\n")
 	print("------------- Dataset 13'000 -------------")
 	cross_validation(DATASET_13_PATH, "user_", "dataset13", model_dir_path, test02_results_filename)
-	"""accuracy_sum = 0 # We will use this two variables to keep track of the sum of the accuracies.
-	mean_class_accuracy_sum = 0
-	for user in users:
-		print("--- User ", user)
-		# We need a new model directory for each execution, otherwise we would be re-using
-		# an already trained model.
-		current_model_dir = os.path.join(model_dir_path, "tl-dataset13-user-" + user + " " + str(datetime.now()))
-		os.mkdir(current_model_dir)
-		
-		# Create the transfer learning estimator.
-		deepSense_transferLearning_classifier = tf.estimator.Estimator(
-			model_fn = tl_model_fn,
-			model_dir = current_model_dir,
-			params = {"kernel_value": 0, 
-						"bias_value": 0})
-		
-		# Get the path of the data for training and evaluation of the current user.
-		user_data13_folder_path = os.path.join(DATASET_13_PATH, "tl_user_" + user)
-		train_data_folder_path = os.path.join(user_data13_folder_path, "train")
-		eval_data_folder_path = os.path.join(user_data13_folder_path, "eval")
-	
-		print("Start Training")
-		# Train the classifier on training set.
-		deepSense_transferLearning_classifier.train(lambda:tl_input_fn(train_data_folder_path), steps=10)
-		print("End Training")
-		
-		print("Start Evaluation")
-		# Evaluate accuracy on test set.
-		eval_result = deepSense_transferLearning_classifier.evaluate(lambda:tl_input_fn(eval_data_folder_path), steps=10)
-		print("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}".format(**eval_result))
-		print("End Evaluation")
-		
-		accuracy_sum += eval_result["accuracy"]
-		mean_class_accuracy_sum += eval_result["mean_perClass_accuracy"]
-		
-		# Write user results on file.
-		with open(test02_results_filename, 'a') as out_file:
-			out_file.write("--- User " + user + "\n")
-			out_file.write("Test Set Accuracy: {accuracy:0.3f}\nMean per Class Accuracy: {mean_perClass_accuracy:0.3f}\n".format(**eval_result))
-	
-	# Compute cross validation results and write on file.	
-	cross_validation_accuracy = accuracy_sum / 9
-	cross_validation_mean_per_class_accuracy = mean_class_accuracy_sum / 9
-	
-	with open(test02_results_filename, 'a') as out_file:
-		out_file.write("\n\nFinal Cross Validation Accuracy: " + str(cross_validation_accuracy))
-		out_file.write("\nFinal Cross Validation Mean Per Class Accuracy: " + str(cross_validation_mean_per_class_accuracy))"""
