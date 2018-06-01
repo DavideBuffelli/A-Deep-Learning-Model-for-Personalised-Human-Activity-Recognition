@@ -199,6 +199,11 @@ def deepSense_model_fn(features, labels, mode, params):
 	# Calculate the loss(Cross Entropy).
 	batchLoss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=labels)
 	loss = tf.reduce_mean(batchLoss)
+	
+	# Add regularization
+	vars = tf.trainable_variables()
+	lossL2 = tf.add_n([tf.nn.l2_loss(v) for v in vars if 'bias' not in v.name]) * 5e-4
+	loss += lossL2
         
 	# EVALUATION MODE
 	if mode == tf.estimator.ModeKeys.EVAL:
@@ -215,7 +220,7 @@ def deepSense_model_fn(features, labels, mode, params):
 	if mode == tf.estimator.ModeKeys.TRAIN:
 		# For training I used the same optimizer used by the authors of the DeepSense paper.
 		optimizer = tf.train.AdamOptimizer(
-			learning_rate=1e-5,
+			learning_rate=1e-4,
 			beta1=0.5,
 			beta2=0.9)
 		train_op = optimizer.minimize(loss, global_step=tf.train.get_or_create_global_step())
@@ -320,16 +325,3 @@ if __name__ == "__main__":
 		print("Probabilities: ", p["probabilities"])
 		print("Logits: ", p["logits"])
 		print("Transfer Learning input: ", p["tl_input"])
-		
-	kernel = deepSense_classifier.get_variable_value("dense/kernel")
-	bias = deepSense_classifier.get_variable_value("dense/bias")
-	print(kernel.shape)
-	print(bias.shape)
-	"""
-	for transfer learning
-	print(deepSense_classifier.get_variable_names())
-	kernel = deepSense_classifier.get_variable_value("dense/kernel")
-	bias = deepSense_classifier.get_variable_value("dense/bias")
-	print(kernel.shape)
-	print(bias.shape)
-	"""
