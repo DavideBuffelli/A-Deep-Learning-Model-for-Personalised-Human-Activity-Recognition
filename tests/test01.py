@@ -5,18 +5,21 @@ import numpy as np
 from deepSense import deepSense_model_fn, input_fn
 from datetime import datetime
 
-# TEST 01
-# We are using the DeepSense model with the parameters taken from the code made available
-# by the authors, and we are using leave-one-out cross validation(on the users) to determine
-# the accuracy on the "augmented" dataset(130'000 elements) and on the "non-augmented" one
-# (13'000 elements).
+"""
+	TEST 01
+	
+	We are using the DeepSense model with the parameters taken from the code made available
+	by the authors, and we are using leave-one-out cross validation (on the users) to determine
+	the accuracy on the "augmented" dataset(120'000 elements) and on the "non-augmented" one
+	(12'000 elements).
+"""
 
 # Directories containing the datasets.
-DATASET_130_PATH = "/Users/davidebuffelli/Desktop/Data"
-DATASET_13_PATH = "/Users/davidebuffelli/Desktop/Data"
+DATASET_120_PATH = "/Path/To/Data/Dir"
+DATASET_12_PATH = "/Path/To/Data/Dir"
 
 # In the tests directory we create a result directory if it does not already exist.
-TESTS_DIR = "/Users/davidebuffelli/Desktop/Prova/tests"
+TESTS_DIR = "/Path/To/Test/Dir"
 RESULTS_DATA_DIR = os.path.join(TESTS_DIR, "results")
 if not os.path.exists(RESULTS_DATA_DIR):
 	os.mkdir(RESULTS_DATA_DIR)
@@ -36,7 +39,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		print("--- User ", user)
 		# We need a new model directory for each execution, otherwise we would be re-using
 		# an already trained model.
-		current_model_dir = os.path.join(model_dir_path, dataset_name + "-user-" + user + "-" + str(datetime.now().strftime("%Y-%m-%d-%H-%M-%S")))
+		current_model_dir = os.path.join(model_dir_path, dataset_name + "-user-" + user)
 		os.mkdir(current_model_dir)
 		
 		# Create the estimator.
@@ -71,7 +74,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 			
 		# In the model directory we are going to write a .csv file with the values of the
 		# kernel and the bias of the output layer of the final trained model. This will be 
-		# used for initializing the transfer learning model in test02.
+		# used for the initialization of the transfer learning model in test02.
 		kernel = deepSense_classifier.get_variable_value("dense/kernel")
 		bias = deepSense_classifier.get_variable_value("dense/bias")
 		with open(os.path.join(current_model_dir, "kernel_bias.csv"), "w") as csvfile:
@@ -151,18 +154,17 @@ def perform_test01():
 			"gru_cell1_dropout_output_keep_prob": 0.5,
 			"gru_cell2_dropout_output_keep_prob": 0.5}
 
-# ---------------------------------- Dataset 130'000 ----------------------------------
+# ---------------------------------- Dataset 120'000 ----------------------------------
 # We start with the bigger dataset.
 	with open(test01_results_filename, "a") as out_file:
 		out_file.write("\n\n\n-------------------------- TEST 01 - Date: " + str(datetime.now()) + " --------------------------\n")
-		out_file.write("------------- Dataset 130'000 -------------\n")
-	print("------------- Dataset 130'000 -------------")
-	cross_validation(DATASET_130_PATH, "sepHARData_", "dataset130", model_dir_path, default_params, test01_results_filename)
+		out_file.write("------------- Dataset 120'000 -------------\n")
+	print("------------- Dataset 120'000 -------------")
+	cross_validation(DATASET_120_PATH, "sepHARData_", "dataset120", model_dir_path, default_params, test01_results_filename)
 		
-# ---------------------------------- Dataset 13'000	----------------------------------
+# ---------------------------------- Dataset 12'000	----------------------------------
 # Same as before, but with the other dataset.
 	with open(test01_results_filename, "a") as out_file:
-		out_file.write("\n\n------------- Dataset 13'000 -------------\n")
-	print("------------- Dataset 13'000 -------------")
-	cross_validation(DATASET_13_PATH, "user_", "dataset13", model_dir_path, default_params, test01_results_filename)
-	
+		out_file.write("\n\n\n------------- Dataset 12'000 -------------\n")
+	print("------------- Dataset 12'000 -------------")
+	cross_validation(DATASET_12_PATH, "user_", "dataset12", model_dir_path, default_params, test01_results_filename)

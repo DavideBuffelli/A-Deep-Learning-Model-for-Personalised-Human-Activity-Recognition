@@ -4,13 +4,16 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy.fftpack import fft
 
-# Run after running sepUsers.py. This will "merge" the measurements
-# from accelerometer and gyroscope, doing all the necessary pre-processing(as described in
-# the thesis).  
+"""
+	Run after running sepUsers.py. This will "merge" the measurements
+	from accelerometer and gyroscope, doing all the necessary pre-processing(as described in
+	the thesis).  
+"""
 
-user_folders_Dir = "/Users/davidebuffelli/Desktop/Data"
+user_folders_Dir = "/Path/To/Data/Dir"
 users_names = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
 activities = ["bike", "sit", "stand", "walk", "stairsup", "stairsdown"]
+AUGMENTATION_NUMBER = 10
 
 SAMPLE_LENGTH = 5.0
 INTERVAL_LENGTH = 0.25 #TAO
@@ -33,8 +36,8 @@ def interp_and_FFT(interval_times, interval_values):
 	return FFT_values # returns a list of complex-valued arrays.
 
 file_index = 0
-def merge_mesaurements(acc_measurements, gyro_measurements, output_dir):
-	# In some cases there are too little data, and there are some measurements that have
+def merge_mesaurements(acc_measurements, gyro_measurements, output_dir, aug_num):
+	# In some cases there is too little data, and there are some measurements that have
 	# only data for the accelerometer. We discard these cases.
 	if len(acc_measurements) < 30 or len(gyro_measurements) == 0:
 		return
@@ -99,7 +102,7 @@ def merge_mesaurements(acc_measurements, gyro_measurements, output_dir):
 	
 	# Previous loop finishes when accelerometer measurements finish, but we might be in a case 
 	# where the sample was shorter than SAMPLE_LENGTH. We simply pad it with zeroes at the end.
-	# (We will take count of this when we will use it in the DeepSense framework).		
+	# (We will use this information in the DeepSense framework).		
 	if len(output) < TOT_FEATURES_PER_SAMPLE:
 		output.extend([0.0 for _ in range(TOT_FEATURES_PER_SAMPLE-len(output))])
 	
@@ -116,7 +119,7 @@ def merge_mesaurements(acc_measurements, gyro_measurements, output_dir):
 	# Write output.
 	global file_index
 	gt_folder = os.path.join(output_dir, gt)
-	with open(os.path.join(gt_folder, str(file_index)+".csv"), "w") as writeFile:
+	with open(os.path.join(gt_folder, str(file_index) + "_" + str(aug_num) +".csv"), "w") as writeFile:
 		writer = csv.writer(writeFile)
 		writer.writerow(output)
 		file_index += 1
@@ -126,56 +129,57 @@ def merge_mesaurements(acc_measurements, gyro_measurements, output_dir):
 for user in users_names:
 	print("Current User: ", user)
 	user_dir = os.path.join(user_folders_Dir, user)
-	acc_file = os.path.join(user_dir, "accelerometer.csv")
-	gyro_file = os.path.join(user_dir, "gyroscope.csv")
+	for aug_num in range(AUGMENTATION_NUMBER):
+		acc_file = os.path.join(user_dir, "accelerometer" + str(aug_num) + ".csv")
+		gyro_file = os.path.join(user_dir, "gyroscope" + str(aug_num) + ".csv")
 
-	# Create a directory named final where we will have all the activities folder where we will
-	# put all the output files(one .csv file per SAMPLE_LENGTH seconds sample).
-	output_dir = os.path.join(user_dir, "final")
-	if not os.path.exists(output_dir):
-		os.mkdir(output_dir)
-	for activity in activities:
-		if not os.path.exists(os.path.join(output_dir, activity)):
-			os.mkdir(os.path.join(output_dir, activity))
+		# Create a directory named final where we will have all the activities folder where we will
+		# put all the output files(one .csv file per SAMPLE_LENGTH seconds sample).
+		output_dir = os.path.join(user_dir, "final")
+		if not os.path.exists(output_dir):
+			os.mkdir(output_dir)
+		for activity in activities:
+			if not os.path.exists(os.path.join(output_dir, activity)):
+				os.mkdir(os.path.join(output_dir, activity))
 
-	with open(acc_file, "r") as accFile, open(gyro_file, "r") as gyroFile:
-		readAcc = csv.DictReader(accFile, delimiter=",")
-		readGyro = csv.DictReader(gyroFile, delimiter=",")
+		with open(acc_file, "r") as accFile, open(gyro_file, "r") as gyroFile:
+			readAcc = csv.DictReader(accFile, delimiter=",")
+			readGyro = csv.DictReader(gyroFile, delimiter=",")
 		
-		# Different devices use different starting points for their timestamps(we can use
-		# this to distinguish devices), but they are always in nanoseconds, so dividing by
-		# 1000000000 we get the value in seconds.
-		acc_row = next(readAcc, None)
-		while acc_row is not None:
-			# Get all the accelerometer measurements(of the same device and of the same activity)
-			# that compose a SAMPLE_LENGTH seconds interval.
-			if acc_row is not None:
-				current_gt = acc_row["gt"]
-				current_timeStamp_length = len(acc_row["time"])
-				start_time = int(acc_row["time"]) / 1000000000
-				last_timestamp = start_time
-				time_count = 0.0
-				interval_acc_measurements = []
-				while time_count + (int(acc_row["time"]) / 1000000000) - last_timestamp < SAMPLE_LENGTH and acc_row["gt"] == current_gt and len(acc_row["time"]) == current_timeStamp_length:
-					interval_acc_measurements.append(acc_row)
-					row_timestamp = int(acc_row["time"]) / 1000000000
-					time_count += row_timestamp - last_timestamp
-					last_timestamp = row_timestamp
-					acc_row = next(readAcc, None)
-					if acc_row is None:
-						break
+			# Different devices use different starting points for their timestamps(we can use
+			# this to distinguish devices), but they are always in nanoseconds, so dividing by
+			# 1000000000 we get the value in seconds.
+			acc_row = next(readAcc, None)
+			while acc_row is not None:
+				# Get all the accelerometer measurements(of the same device and of the same activity)
+				# that compose a SAMPLE_LENGTH seconds interval.
+				if acc_row is not None:
+					current_gt = acc_row["gt"]
+					current_timeStamp_length = len(acc_row["time"])
+					start_time = int(acc_row["time"]) / 1000000000
+					last_timestamp = start_time
+					time_count = 0.0
+					interval_acc_measurements = []
+					while time_count + (int(acc_row["time"]) / 1000000000) - last_timestamp < SAMPLE_LENGTH and acc_row["gt"] == current_gt and len(acc_row["time"]) == current_timeStamp_length:
+						interval_acc_measurements.append(acc_row)
+						row_timestamp = int(acc_row["time"]) / 1000000000
+						time_count += row_timestamp - last_timestamp
+						last_timestamp = row_timestamp
+						acc_row = next(readAcc, None)
+						if acc_row is None:
+							break
 			
-				# Get the gyroscope samples that were taken in the same time as the accelerometer ones.
-				gyro_row = next(readGyro, None)
-				while gyro_row is not None and (int(gyro_row["time"]) / 1000000000) < start_time and abs((int(gyro_row["time"]) / 1000000000) - start_time) > 0.01 \
-						and gyro_row["gt"] == current_gt and len(gyro_row["time"]) == current_timeStamp_length:
+					# Get the gyroscope samples that were taken in the same time as the accelerometer ones.
 					gyro_row = next(readGyro, None)
-				interval_gyro_measurements = []
-				while gyro_row is not None and (int(gyro_row["time"]) / 1000000000) < last_timestamp \
-						and gyro_row["gt"] == current_gt and len(gyro_row["time"]) == current_timeStamp_length:
-					interval_gyro_measurements.append(gyro_row)
-					gyro_row = next(readGyro, None)
+					while gyro_row is not None and (int(gyro_row["time"]) / 1000000000) < start_time and abs((int(gyro_row["time"]) / 1000000000) - start_time) > 0.01 \
+							and gyro_row["gt"] == current_gt and len(gyro_row["time"]) == current_timeStamp_length:
+						gyro_row = next(readGyro, None)
+					interval_gyro_measurements = []
+					while gyro_row is not None and (int(gyro_row["time"]) / 1000000000) < last_timestamp \
+							and gyro_row["gt"] == current_gt and len(gyro_row["time"]) == current_timeStamp_length:
+						interval_gyro_measurements.append(gyro_row)
+						gyro_row = next(readGyro, None)
 				
-				# Pass accelerometer and gyroscope samples to merge_mesaurements to create 
-				# the final output file for this SAMPLE_LENGTH seconds sample.
-				merge_mesaurements(interval_acc_measurements, interval_gyro_measurements, output_dir)
+					# Pass accelerometer and gyroscope samples to merge_mesaurements to create 
+					# the final output file for this SAMPLE_LENGTH seconds sample.
+					merge_mesaurements(interval_acc_measurements, interval_gyro_measurements, output_dir, aug_num)

@@ -8,11 +8,20 @@ from transferLearning import tl_model_fn, tl_input_fn
 from datetime import datetime
 import random
 
+"""
+	TEST 03
+	
+	This test is aimed to demonstrate the effectiveness of the customized DeepSense framework
+	by training the base network on the training set where the labels have been randomly 
+	permutated and then training and evaluating the final custom network on the same dataset
+	used in test02 (therefore on regular data).
+"""
+
 # Directories containing the datasets.
-DATASET_130_PATH = "/Users/davidebuffelli/Desktop/Data"
+DATASET_120_PATH = "/Path/To/Data/Dir"
 
 # In the tests directory we create a result directory if it does not already exist.
-TESTS_DIR = "/Users/davidebuffelli/Desktop/Prova/tests"
+TESTS_DIR = "/Path/To/Test/Dir"
 RESULTS_DATA_DIR = os.path.join(TESTS_DIR, "results")
 if not os.path.exists(RESULTS_DATA_DIR):
 	os.mkdir(RESULTS_DATA_DIR)
@@ -37,8 +46,8 @@ def permuteLabels(DATA_DIRECTORY_PATH):
 						csv_reader = csv.reader(csvfile)
 						line = next(csv_reader)
 						l = list(map(float, line)) # Doubles require a lot less space than strings
-                        features.append(l[:-6])
-                        labels.append(l[-6:])
+						features.append(l[:-6])
+						labels.append(l[-6:])
 
 	# Shuffle the labels.
 	random.shuffle(labels)
@@ -63,8 +72,8 @@ def permuteLabels(DATA_DIRECTORY_PATH):
 						csv_reader = csv.reader(csvfile)
 						line = next(csv_reader)
 						l = list(map(float, line)) # Doubles require a lot less space than strings
-                        features.append(l[:-6])
-                        labels.append(l[-6:])
+						features.append(l[:-6])
+						labels.append(l[-6:])
 
 	# Shuffle the labels.
 	random.shuffle(labels)
@@ -164,12 +173,12 @@ def perform_test03():
 			params = default_params)
 		
 		# Get the path of the data for training and evaluation of the current user.
-		user_data_folder_path = os.path.join(DATASET_130_PATH, "sepHARData_" + user)
+		user_data_folder_path = os.path.join(DATASET_120_PATH, "sepHARData_" + user)
 		
 		# Shuffle the labels of the examples.
 		print("Shuffling data..")
 		permuteLabels(user_data_folder_path)
-		print("End Shuffle")
+		print("End Shuffle.")
 		
 		# Train the estimator with the shuffled training data.
 		print("Start training")
@@ -219,7 +228,7 @@ def perform_test03():
 		os.mkdir(current_model_dir)
 		
 		# Get the path of the data for training and evaluation of the current user.
-		user_data_folder_path = os.path.join(DATASET_130_PATH, "tl_sepHARData_" + user)
+		user_data_folder_path = os.path.join(DATASET_120_PATH, "tl_sepHARData_" + user)
 		train_data_folder_path = os.path.join(user_data_folder_path, "train")
 		eval_data_folder_path = os.path.join(user_data_folder_path, "eval")
 		

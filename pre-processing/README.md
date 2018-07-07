@@ -13,6 +13,9 @@ Then the files are meant to be executed in the following order:
 The code in this file creates one folder for each user, and inside each folder it creates two .csv files that will
 contain accelerometer and gyroscope data for that user. 
 
+* [augmentation.py](augmentation.py)
+Run this if you want to perform data augmentation to the dataset (see thesis for more details). Otherwise you can just skip to the next.
+
 * [mergeSensors.py](mergeSensors.py)
 This will "merge" the measurements from accelerometer and gyroscope, doing all the necessary pre-processing.
 

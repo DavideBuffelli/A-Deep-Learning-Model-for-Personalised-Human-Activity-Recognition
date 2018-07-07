@@ -2,8 +2,14 @@ import sys
 import os
 import csv
 
-dataDir = "/Users/davidebuffelli/Desktop/Data/Activityrecognitionexp"
-exportDir = "/Users/davidebuffelli/Desktop/Data"
+"""
+	This file separetes the data of the HHAR dataset. In particular it creates one folder 
+	for each user, and inside each folder it creates two .csv files that will contain 
+	accelerometer and gyroscope data for that user. 
+"""
+
+dataDir = "/Path/To/Activityrecognitionexp"
+exportDir = "/Path/To/Output/Data/Dir"
 
 # Create one folder for each user, and inside each folder create two .csv files that will
 # contain accelerometer and gyroscope data for that user.
@@ -20,18 +26,18 @@ for user in users_names:
 			writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
 			writer.writeheader()
 
-# Extract accelerometer data foe each user and save it in the accelerometer.csv file
+# Extract accelerometer data for each user and save it in the accelerometer.csv file
 # in his folder. We are interested only in the fields: "Creation_Time", "x", "y", "z" and "gt".
 file_name = [os.path.join(dataDir, "Phones_accelerometer.csv")]
-with open(os.path.join(exportDir, "a", "accelerometer.csv"), "a") as curWriteFileA,\
-	open(os.path.join(exportDir, "b", "accelerometer.csv"), "a") as curWriteFileB,\
-	open(os.path.join(exportDir, "c", "accelerometer.csv"), "a") as curWriteFileC,\
-	open(os.path.join(exportDir, "d", "accelerometer.csv"), "a") as curWriteFileD,\
-	open(os.path.join(exportDir, "e", "accelerometer.csv"), "a") as curWriteFileE,\
-	open(os.path.join(exportDir, "f", "accelerometer.csv"), "a") as curWriteFileF,\
-	open(os.path.join(exportDir, "g", "accelerometer.csv"), "a") as curWriteFileG,\
-	open(os.path.join(exportDir, "h", "accelerometer.csv"), "a") as curWriteFileH,\
-	open(os.path.join(exportDir, "i", "accelerometer.csv"), "a") as curWriteFileI,\
+with open(os.path.join(exportDir, "a", "accelerometer0.csv"), "a") as curWriteFileA,\
+	open(os.path.join(exportDir, "b", "accelerometer0.csv"), "a") as curWriteFileB,\
+	open(os.path.join(exportDir, "c", "accelerometer0.csv"), "a") as curWriteFileC,\
+	open(os.path.join(exportDir, "d", "accelerometer0.csv"), "a") as curWriteFileD,\
+	open(os.path.join(exportDir, "e", "accelerometer0.csv"), "a") as curWriteFileE,\
+	open(os.path.join(exportDir, "f", "accelerometer0.csv"), "a") as curWriteFileF,\
+	open(os.path.join(exportDir, "g", "accelerometer0.csv"), "a") as curWriteFileG,\
+	open(os.path.join(exportDir, "h", "accelerometer0.csv"), "a") as curWriteFileH,\
+	open(os.path.join(exportDir, "i", "accelerometer0.csv"), "a") as curWriteFileI,\
 	open(file_name) as csvInputFile:
 	
 	writers = {"a":csv.DictWriter(curWriteFileA, fieldnames=fieldnames),
@@ -53,15 +59,15 @@ with open(os.path.join(exportDir, "a", "accelerometer.csv"), "a") as curWriteFil
 	
 # Same as before but for gyroscope data.			
 file_name = [os.path.join(dataDir, "Phones_gyroscope.csv")]
-with open(os.path.join(exportDir, "a", "gyroscope.csv"), "a") as curWriteFileA,\
-	open(os.path.join(exportDir, "b", "gyroscope.csv"), "a") as curWriteFileB,\
-	open(os.path.join(exportDir, "c", "gyroscope.csv"), "a") as curWriteFileC,\
-	open(os.path.join(exportDir, "d", "gyroscope.csv"), "a") as curWriteFileD,\
-	open(os.path.join(exportDir, "e", "gyroscope.csv"), "a") as curWriteFileE,\
-	open(os.path.join(exportDir, "f", "gyroscope.csv"), "a") as curWriteFileF,\
-	open(os.path.join(exportDir, "g", "gyroscope.csv"), "a") as curWriteFileG,\
-	open(os.path.join(exportDir, "h", "gyroscope.csv"), "a") as curWriteFileH,\
-	open(os.path.join(exportDir, "i", "gyroscope.csv"), "a") as curWriteFileI,\
+with open(os.path.join(exportDir, "a", "gyroscope0.csv"), "a") as curWriteFileA,\
+	open(os.path.join(exportDir, "b", "gyroscope0.csv"), "a") as curWriteFileB,\
+	open(os.path.join(exportDir, "c", "gyroscope0.csv"), "a") as curWriteFileC,\
+	open(os.path.join(exportDir, "d", "gyroscope0.csv"), "a") as curWriteFileD,\
+	open(os.path.join(exportDir, "e", "gyroscope0.csv"), "a") as curWriteFileE,\
+	open(os.path.join(exportDir, "f", "gyroscope0.csv"), "a") as curWriteFileF,\
+	open(os.path.join(exportDir, "g", "gyroscope0.csv"), "a") as curWriteFileG,\
+	open(os.path.join(exportDir, "h", "gyroscope0.csv"), "a") as curWriteFileH,\
+	open(os.path.join(exportDir, "i", "gyroscope0.csv"), "a") as curWriteFileI,\
 	open(file_name) as csvInputFile:
 	
 	writers = {"a":csv.DictWriter(curWriteFileA, fieldnames=fieldnames),

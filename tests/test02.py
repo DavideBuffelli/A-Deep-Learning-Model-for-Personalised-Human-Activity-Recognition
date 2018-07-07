@@ -7,12 +7,19 @@ from deepSense import deepSense_model_fn, input_fn, predict_input_fn
 from transferLearning import tl_model_fn, tl_input_fn
 from datetime import datetime
 
+"""
+	TEST 02
+	
+	This test performs leave-one-out cross validation evaluating the performances of the
+	customized DeepSense framework.
+"""
+
 # Directories containing the datasets.
-DATASET_130_PATH = "/Users/davidebuffelli/Desktop/Data"
-DATASET_13_PATH = "/Users/davidebuffelli/Desktop/Data"
+DATASET_120_PATH = "/Path/To/Data/Dir"
+DATASET_12_PATH = "/Path/To/Data/Dir"
 
 # In the tests directory we create a result directory if it does not already exist.
-TESTS_DIR = "/Users/davidebuffelli/Desktop/Prova/tests"
+TESTS_DIR = "/Path/To/Test/Dir"
 RESULTS_DATA_DIR = os.path.join(TESTS_DIR, "results")
 if not os.path.exists(RESULTS_DATA_DIR):
 	os.mkdir(RESULTS_DATA_DIR)
@@ -160,7 +167,7 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		print("--- User ", user)
 		# We need a new model directory for each execution, otherwise we would be re-using
 		# an already trained model.
-		current_model_dir = os.path.join(model_dir_path, "tl-" + dataset_name + "-user-" + user + "-" + str(datetime.now().strftime("%Y-%m-%d-%H-%M-%S")))
+		current_model_dir = os.path.join(model_dir_path, "tl-" + dataset_name + "-user-" + user)
 		os.mkdir(current_model_dir)
 		
 		# Get the path of the data for training and evaluation of the current user.
@@ -212,38 +219,38 @@ def cross_validation(data_folder_path, data_prefix, dataset_name, model_dir_path
 		out_file.write("\n\nFinal Cross Validation Accuracy: " + str(cross_validation_accuracy))
 		out_file.write("\nFinal Cross Validation Mean Per Class Accuracy: " + str(cross_validation_mean_per_class_accuracy))
 			
-			
+		
 def perform_test02():
 	# We need to create the dataset for the transfer learning model.
 	model_dirs = {
-		"a": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-a",
-		"b": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-b",
-		"c": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-c",
-		"d": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-d",
-		"e": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-e",
-		"f": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-f",
-		"g": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-g",
-		"h": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-h",
-		"i": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset130-user-i"
+		"a": "/home/buffellida/Tests/modelDir/dataset120-user-a",
+		"b": "/home/buffellida/Tests/modelDir/dataset120-user-b",
+		"c": "/home/buffellida/Tests/modelDir/dataset120-user-c",
+		"d": "/home/buffellida/Tests/modelDir/dataset120-user-d",
+		"e": "/home/buffellida/Tests/modelDir/dataset120-user-e",
+		"f": "/home/buffellida/Tests/modelDir/dataset120-user-f",
+		"g": "/home/buffellida/Tests/modelDir/dataset120-user-g",
+		"h": "/home/buffellida/Tests/modelDir/dataset120-user-h",
+		"i": "/home/buffellida/Tests/modelDir/dataset120-user-i"
 		}
-	print("Creating Dataset 130 ..")
-	create_dataset(DATASET_130_PATH, "sepHARData_", model_dirs)
-	print("Dataset 130 Created.")
+	print("Creating Dataset 120 ..")
+	create_dataset(DATASET_120_PATH, "sepHARData_", model_dirs)
+	print("Dataset 120 Created.")
 	
 	model_dirs = {
-		"a": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-a",
-		"b": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-b",
-		"c": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-c",
-		"d": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-d",
-		"e": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-e",
-		"f": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-f",
-		"g": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-g",
-		"h": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-h",
-		"i": "/Users/davidebuffelli/Desktop/Prova/tests/modelDir/dataset13-user-i"
+		"a": "/home/buffellida/Tests/modelDir/dataset12-user-a",
+		"b": "/home/buffellida/Tests/modelDir/dataset12-user-b",
+		"c": "/home/buffellida/Tests/modelDir/dataset12-user-c",
+		"d": "/home/buffellida/Tests/modelDir/dataset12-user-d",
+		"e": "/home/buffellida/Tests/modelDir/dataset12-user-e",
+		"f": "/home/buffellida/Tests/modelDir/dataset12-user-f",
+		"g": "/home/buffellida/Tests/modelDir/dataset12-user-g",
+		"h": "/home/buffellida/Tests/modelDir/dataset12-user-h",
+		"i": "/home/buffellida/Tests/modelDir/dataset12-user-i"
 		}
-	print("Creating Dataset 13..")
-	create_dataset(DATASET_13_PATH, "user_", model_dirs)
-	print("Dataset 13 Created.")
+	print("Creating Dataset 12 ..")
+	create_dataset(DATASET_12_PATH, "user_", model_dirs)
+	print("Dataset 12 Created.")
 	
 	
 	# Create a directory where we will save all the model directories.
@@ -251,16 +258,16 @@ def perform_test02():
 	if not os.path.exists(model_dir_path):
 		os.mkdir(model_dir_path)
 
-# ---------------------------------- Dataset 130'000	----------------------------------			
+# ---------------------------------- Dataset 120'000	----------------------------------			
 	with open(test02_results_filename, "a") as out_file:
 		out_file.write("\n\n\n-------------------------- TEST 02 - Date: " + str(datetime.now()) + " --------------------------\n")
-		out_file.write("------------- Dataset 130'000 -------------\n")
-	print("------------- Dataset 130'000 -------------")
-	cross_validation(DATASET_130_PATH, "sepHARData_", "dataset130", model_dir_path, test02_results_filename)
+		out_file.write("------------- Dataset 120'000 -------------\n")
+	print("------------- Dataset 120'000 -------------")
+	cross_validation(DATASET_120_PATH, "sepHARData_", "dataset120", model_dir_path, test02_results_filename)
 	
-# ---------------------------------- Dataset 13'000	----------------------------------	
-	# Now same as before but for the 13'000 dataset
+# ---------------------------------- Dataset 12'000	----------------------------------	
+	# Now same as before but for the 12'000 dataset
 	with open(test02_results_filename, "a") as out_file:
-		out_file.write("\n\n------------- Dataset 13'000 -------------\n")
-	print("------------- Dataset 13'000 -------------")
-	cross_validation(DATASET_13_PATH, "user_", "dataset13", model_dir_path, test02_results_filename)
+		out_file.write("\n\n------------- Dataset 12'000 -------------\n")
+	print("------------- Dataset 12'000 -------------")
+	cross_validation(DATASET_12_PATH, "user_", "dataset12", model_dir_path, test02_results_filename)

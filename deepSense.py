@@ -1,8 +1,13 @@
 import tensorflow as tf
 import os
 
+"""
+	The implementation of the DeepSense framework using TensorFlow's high level APIs. 
+	As suggested by Tensorflow's documentation, we have an input_fn that creates a 
+	tf.data.Dataset object and a model_fn that creates the model. 
+"""
+
 # ---------------------------- CONSTANTS ------------------------------------------------
-BATCH_SIZE = 10 # Size of the batches of examples used for training and evaluation.
 SAMPLE_LENGTH = 5.0 # Length in seconds of each sample that is contained in a .csv file.
 TAO = 0.25 # Interval length
 NUMBER_OF_INTERVALS = int(SAMPLE_LENGTH / TAO) # It has to be in integer.
@@ -36,10 +41,10 @@ def input_fn(batch_size, training, data_folder_path):
 	filename_queue = tf.train.match_filenames_once(os.path.join(data_folder_path, "*.csv"))
 		
 	dataset = tf.data.TextLineDataset(filename_queue) # Dataset that reads each file as a line of text.
-	dataset = dataset.map(read_csv) # Trasform a line of text in a dictionary with features, length and labels.
+	dataset = dataset.map(read_csv) # Transform a line of text in a dictionary with features, length and labels.
 	if training:
 		dataset = dataset.shuffle(buffer_size=1500)
-	dataset = dataset.batch(BATCH_SIZE)
+	dataset = dataset.batch(batch_size)
 	
 	return dataset
 
@@ -202,7 +207,7 @@ def deepSense_model_fn(features, labels, mode, params):
 	
 	# Add regularization
 	vars = tf.trainable_variables()
-	lossL2 = tf.add_n([tf.nn.l2_loss(v) for v in vars if 'bias' not in v.name]) * 5e-4
+	lossL2 = tf.add_n([tf.nn.l2_loss(v) for v in vars if "bias" not in v.name]) * 5e-4
 	loss += lossL2
         
 	# EVALUATION MODE
@@ -228,14 +233,17 @@ def deepSense_model_fn(features, labels, mode, params):
 
 # ----------------------------- USAGE EXAMPLE -------------------------------------------
 if __name__ == "__main__":
+	BATCH_SIZE = 64 # Size of the batches of examples used for training and evaluation.
+	
 	# Directory Paths
-	TRAINING_DATA_FOLDER_PATH = "/Users/davidebuffelli/Desktop/Prova/Data/train"
-	EVAL_DATA_FOLDER_PATH = "/Users/davidebuffelli/Desktop/Prova/Data/eval"
-	MODEL_DIR_PATH = "/home/davidebuffelli/Desktop/Prova/ModelDir"
-	SAVED_MODEL_DIR_PATH = "/Users/davidebuffelli/Desktop/Prova/SavedModelDir"
+	TRAINING_DATA_FOLDER_PATH = "/Path/To/Training/Data/Dir"
+	EVAL_DATA_FOLDER_PATH = "/Path/To/Eval/Data/Dir"
+	MODEL_DIR_PATH = "/Path/To/ModelDir/Dir"
+	SAVED_MODEL_DIR_PATH = "/Path/To/Output/SavedModel/Dir"
 	
 	# -------------- CREATE ESTIMATOR
 	# Wrap DeepSense estimator in a tf.estimator.Estimator, passing all parameters.
+	# These are the ones specified by the authors of the DeepSense framework.
 	deepSense_classifier = tf.estimator.Estimator(
 		model_fn = deepSense_model_fn,
 		model_dir = MODEL_DIR_PATH,
@@ -318,7 +326,7 @@ if __name__ == "__main__":
 		tf.estimator.export.build_raw_serving_input_receiver_fn({"features":tf.placeholder(tf.float32, shape=[NUMBER_OF_INTERVALS, FEATURE_DIM]), "length":tf.placeholder(tf.int64, shape=[1])}))
 
 	# -------------- EXAMPLE OF PREDICTION
-	predictions = deepSense_classifier.predict(lambda:predict_input_fn("/Users/davidebuffelli/Desktop/Prova/Data/eval/eval_18.csv"))
+	predictions = deepSense_classifier.predict(lambda:predict_input_fn("/Path/To/CSV/File"))
 
 	for p in predictions:
 		print("Predicted Class: ", p["class_ids"])

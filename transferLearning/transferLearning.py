@@ -2,6 +2,12 @@ import tensorflow as tf
 import os
 import numpy as np
 
+"""
+	This file contains the implementation of the custom DeepSense framework using TensorFlow's
+	high level APIs. As suggested by Tensorflow's documentation, we have an input_fn that 
+	creates a tf.data.Dataset object and a model_fn that creates the model. 
+"""
+
 MODEL_DIR_PATH = ""
 FEATURES_DIM = 120
 OUT_DIM = 6
@@ -82,9 +88,9 @@ def tl_model_fn(features, labels, mode, params):
 	if mode == tf.estimator.ModeKeys.TRAIN:
 		# For training I used the same optimizer used by the authors of the DeepSense paper.
 		optimizer = tf.train.AdamOptimizer(
-			learning_rate=1e-5,
-			beta1=0.5,
-			beta2=0.9)
+			learning_rate=0.001,
+			beta1=0.9,
+			beta2=0.999)
 		train_op = optimizer.minimize(loss, global_step=tf.train.get_or_create_global_step())
 		return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
 		
@@ -95,14 +101,14 @@ if __name__ == "__main__":
 	# the kernel and bias obtained from the output layer of a trained DeepSense model.
 	deepSense_transferLearning_classifier = tf.estimator.Estimator(
 		model_fn = tl_model_fn,
-		model_dir = "/Users/davidebuffelli/Desktop/Prova/ModelDirTL",
+		model_dir = "/Path/To/Model/Dir",
 		params = {"kernel_value": np.random.rand(FEATURES_DIM, OUT_DIM), 
 					"bias_value": np.random.rand(OUT_DIM)})
 	
 	# Train.
-	deepSense_transferLearning_classifier.train(lambda:tl_input_fn("/Users/davidebuffelli/Desktop/Data/tl_sepHARData_a/train"))
+	deepSense_transferLearning_classifier.train(lambda:tl_input_fn("/Path/To/Training/Set"))
 	
 	# Predict.
-	predictions = deepSense_transferLearning_classifier.predict(lambda:tl_predict_input_fn("/Users/davidebuffelli/Desktop/Data/tl_sepHARData_a/eval/eval_200.csv"))
+	predictions = deepSense_transferLearning_classifier.predict(lambda:tl_predict_input_fn("/Path/To/CSV/File"))
 	pred = next(predictions)
 	print(pred["class_ids"])
