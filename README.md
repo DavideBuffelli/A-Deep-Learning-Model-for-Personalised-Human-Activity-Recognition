@@ -1,8 +1,8 @@
-# Titolo tesi 
+# A Deep Learning Model for Personalised Human Activity Recognition
 
 This repository contains the code I developed for my Master's Degree in Computer Engineering thesis. I graduated with the highest degree at the University of Padova and I was supervised by professor Fabio Vandin. 
 
-## Files Organization
+## File Organization
 
 * [Thesis](DavideBuffelliThesis.pdf)
 My Master's Degree thesis. Here you'll find a detailed explanation of the work that has been done and of the theory behind it.
