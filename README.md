@@ -1,6 +1,6 @@
 # Titolo tesi 
 
-This repository contains the code I developed for my Master's Degree in Computer Engineering thesis.
+This repository contains the code I developed for my Master's Degree in Computer Engineering thesis. I graduated with the highest degree at the University of Padova and I was supervised by professor Fabio Vandin. 
 
 ## Files Organization
 
