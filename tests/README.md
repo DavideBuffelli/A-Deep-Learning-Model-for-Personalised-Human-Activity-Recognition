@@ -24,7 +24,7 @@ used in test02 (therefore on regular data).
 
 * Python 3.x
 * NumPy package
-* TensorFlow 1.5.x or greater
+* TensorFlow 1.5.x (haven't tested it with other versions)
 
 ## Acknowledgments
 
