@@ -4,6 +4,8 @@ This repository contains the code I developed for my Master's Degree in Computer
 
 You can find my thesis at the following link: [http://tesi.cab.unipd.it/62146/](http://tesi.cab.unipd.it/62146/)
 
+## Cite
+
 If you use the code in this repository, please cite the following work:
 
 ```A Deep Learning Model for Personalized Human Activity Recognition, Buffelli D., University of Padova, 2019```
