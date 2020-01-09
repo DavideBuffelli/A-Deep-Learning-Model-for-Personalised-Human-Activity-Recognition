@@ -38,4 +38,4 @@ The folder contains the files implementing the tests that have been done.
 * [NumPy](http://www.numpy.org) - NumPy official website.
 
 ## Licence
-Refer to the the file [Licence.txt](Licence.txt).
+Refer to the the file [LICENCE](LICENCE).
