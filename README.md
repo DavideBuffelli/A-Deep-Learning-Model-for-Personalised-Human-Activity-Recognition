@@ -2,10 +2,13 @@
 
 This repository contains the code I developed for my Master's Degree in Computer Engineering thesis. I graduated with the highest degree at the University of Padova and I was supervised by professor Fabio Vandin. 
 
-## File Organization
+You can find my thesis at the following link: [http://tesi.cab.unipd.it/62146/](http://tesi.cab.unipd.it/62146/)
 
-* [Thesis](DavideBuffelliThesis.pdf)
-My Master's Degree thesis. Here you'll find a detailed explanation of the work that has been done and of the theory behind it.
+If you use the code in this repository, please cite the following work:
+
+```A Deep Learning Model for Personalized Human Activity Recognition, Buffelli D., University of Padova, 2019```
+
+## File Organization
 
 * [deepSense.py](deepSense.py)
 My implementation of the DeepSense model.
@@ -25,7 +28,7 @@ The folder contains the files implementing the tests that have been done.
 * NumPy package
 * TensorFlow 1.5.x (haven't tested it with other versions)
 
-## Acknowledgments
+## Related links
 
 * [HHAR Dataset](https://archive.ics.uci.edu/ml/datasets/Heterogeneity+Activity+Recognition) - Heterogeneity Activity Recognition Data Set.
 * [DeepSense: A Unified Deep Learning Framework for Time-Series Mobile Sensing Data Processing](https://arxiv.org/abs/1611.01942) - The DeepSense original paper by Shuochao Yao, Shaohan Hu, Yiran Zhao, Aston Zhang, Tarek Abdelzaher.
@@ -33,3 +36,6 @@ The folder contains the files implementing the tests that have been done.
 * [HHAR-Data-Process](https://github.com/yscacaca/HHAR-Data-Process) - The code for the pre-processing created by the authors of DeepSense.
 * [TensorFlow](https://www.tensorflow.org/) - TensorFlow official website.
 * [NumPy](http://www.numpy.org) - NumPy official website.
+
+## Licence
+Refer to the the file [Licence.txt](Licence.txt).

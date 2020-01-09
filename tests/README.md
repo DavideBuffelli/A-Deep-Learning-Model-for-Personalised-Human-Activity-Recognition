@@ -1,6 +1,6 @@
 # Tests on DeepSense
 
-The files in this folder perform the tests described in my [thesis](../DavideBuffelliThesis.pdf) (chapter 5) on the
+The files in this folder perform the tests described in my [thesis](http://tesi.cab.unipd.it/62146/) (chapter 5) on the
 original DeepSense framework and the customized framework.
 
 ## Files
@@ -26,7 +26,7 @@ used in test02 (therefore on regular data).
 * NumPy package
 * TensorFlow 1.5.x (haven't tested it with other versions)
 
-## Acknowledgments
+## Related Links
 
 * [TensorFlow](https://www.tensorflow.org/) - TensorFlow official website.
 * [NumPy](http://www.numpy.org) - NumPy official website.

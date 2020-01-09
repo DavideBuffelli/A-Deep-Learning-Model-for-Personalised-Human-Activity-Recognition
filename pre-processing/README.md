@@ -1,7 +1,7 @@
 # Pre-Processing for DeepSense
 
 This is my implementation of the pre-processing of the Heterogeneity Activity Recognition Data Set (HHAR) dataset for the DeepSense framework.
-A detailed explanation of the pre-processing can be found in the original DeepSense article (link below) and in my [thesis](../DavideBuffelliThesis.pdf) (chapter 3).
+A detailed explanation of the pre-processing can be found in the original DeepSense article (link below) and in my [thesis](http://tesi.cab.unipd.it/62146/) (chapter 3).
 
 ## Instructions
 
@@ -28,7 +28,7 @@ This file contains a script that organizes the data in folders for leave-one-out
 * NumPy package
 * SciPy package
 
-## Acknowledgments
+## Related Links
 
 * [HHAR Dataset](https://archive.ics.uci.edu/ml/datasets/Heterogeneity+Activity+Recognition) - Heterogeneity Activity Recognition Data Set.
 * [DeepSense: A Unified Deep Learning Framework for Time-Series Mobile Sensing Data Processing](https://arxiv.org/abs/1611.01942) - The paper for the DeepSense framework by Shuochao Yao, Shaohan Hu, Yiran Zhao, Aston Zhang, Tarek Abdelzaher.
