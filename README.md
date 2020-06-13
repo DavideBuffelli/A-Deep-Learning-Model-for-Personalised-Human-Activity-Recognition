@@ -1,8 +1,10 @@
 # A Deep Learning Model for Personalised Human Activity Recognition
 
-This repository contains the code I developed for my Master's Degree in Computer Engineering thesis. I graduated with the highest degree at the University of Padova and I was supervised by professor Fabio Vandin. 
+This repository contains the code I developed for my Master's Degree in Computer Engineering thesis. I graduated with honours at the University of Padova, where I was supervised by professor Fabio Vandin. 
 
 You can find my thesis at the following link: [http://tesi.cab.unipd.it/62146/](http://tesi.cab.unipd.it/62146/)
+
+__Please refer at the following repository: <https://github.com/DavideBuffelli/TrASenD> for a more updated version, and a link to a paper version of this work.__
 
 ## Cite
 
