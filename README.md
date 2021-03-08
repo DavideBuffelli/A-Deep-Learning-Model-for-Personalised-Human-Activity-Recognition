@@ -8,9 +8,20 @@ __Please refer at the following repository: <https://github.com/DavideBuffelli/T
 
 ## Cite
 
-If you use the code in this repository, please cite the following work:
+If you use the code in this repository, please cite my thesis:
 
 ```A Deep Learning Model for Personalized Human Activity Recognition, Buffelli D., University of Padova, 2019```
+
+or the following paper:
+
+```
+@article{buffelli2021attentionbased,
+    title={Attention-Based Deep Learning Framework for Human Activity Recognition with User Adaptation},
+    author={Davide Buffelli and Fabio Vandin},
+    year={2021},
+    journal={IEEE Sensors Journal}
+}
+```
 
 ## File Organization
 
