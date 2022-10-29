@@ -19,10 +19,10 @@ for user in users_names:
     user_folder_path = os.path.join(exportDir, user)
     if not os.path.exists(user_folder_path):
         os.mkdir(user_folder_path)
-        with open(os.path.join(user_folder_path, "accelerometer.csv"), mode="w") as csvFile:
+        with open(os.path.join(user_folder_path, "accelerometer0.csv"), mode="w") as csvFile:
             writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             writer.writeheader()
-        with open(os.path.join(user_folder_path, "gyroscope.csv"), mode="w") as csvFile:
+        with open(os.path.join(user_folder_path, "gyroscope0.csv"), mode="w") as csvFile:
             writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             writer.writeheader()
 
