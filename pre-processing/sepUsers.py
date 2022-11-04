@@ -19,16 +19,16 @@ for user in users_names:
     user_folder_path = os.path.join(exportDir, user)
     if not os.path.exists(user_folder_path):
         os.mkdir(user_folder_path)
-        with open(os.path.join(user_folder_path, "accelerometer.csv"), mode="w") as csvFile:
+        with open(os.path.join(user_folder_path, "accelerometer0.csv"), mode="w") as csvFile:
             writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             writer.writeheader()
-        with open(os.path.join(user_folder_path, "gyroscope.csv"), mode="w") as csvFile:
+        with open(os.path.join(user_folder_path, "gyroscope0.csv"), mode="w") as csvFile:
             writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             writer.writeheader()
 
 # Extract accelerometer data for each user and save it in the accelerometer.csv file
 # in his folder. We are interested only in the fields: "Creation_Time", "x", "y", "z" and "gt".
-file_name = [os.path.join(dataDir, "Phones_accelerometer.csv")]
+file_name = os.path.join(dataDir, "Phones_accelerometer.csv")
 with open(os.path.join(exportDir, "a", "accelerometer0.csv"), "a") as curWriteFileA,\
     open(os.path.join(exportDir, "b", "accelerometer0.csv"), "a") as curWriteFileB,\
     open(os.path.join(exportDir, "c", "accelerometer0.csv"), "a") as curWriteFileC,\
@@ -58,7 +58,7 @@ with open(os.path.join(exportDir, "a", "accelerometer0.csv"), "a") as curWriteFi
                 
     
 # Same as before but for gyroscope data.            
-file_name = [os.path.join(dataDir, "Phones_gyroscope.csv")]
+file_name = os.path.join(dataDir, "Phones_gyroscope.csv")
 with open(os.path.join(exportDir, "a", "gyroscope0.csv"), "a") as curWriteFileA,\
     open(os.path.join(exportDir, "b", "gyroscope0.csv"), "a") as curWriteFileB,\
     open(os.path.join(exportDir, "c", "gyroscope0.csv"), "a") as curWriteFileC,\

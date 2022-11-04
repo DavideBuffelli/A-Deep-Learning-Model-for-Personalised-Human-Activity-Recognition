@@ -31,8 +31,8 @@ for user in users:
             filepath = os.path.join(dataDir, user, "final", activity, file)
             for u in users:
                 if u != user:
-                    outdir = os.path.join(dataDir, "a_user_" + u, "train")
+                    outdir = os.path.join(dataDir, "user_" + u, "train")
                     copy(filepath, outdir)
                 else:
-                    outdir = os.path.join(dataDir, "a_user_" + u, "eval")
+                    outdir = os.path.join(dataDir, "user_" + u, "eval")
                     copy(filepath, outdir)
